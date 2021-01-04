@@ -4,48 +4,68 @@ import statistics as stats
 file = open("ex1data2.txt","rt")
 data = file.read()
 data1 = data.split()
-x1 = []
-x2 = []
+x = []
 y = []
+count2 = 0
 for ele in data1:
     element = ele.split(',')
-    x1.append(float(element[0]))
-    x2.append(float(element[1]))
-    y.append(float(element[2]))
+    m = len(element)
+    count = 0
+    element2 = []
+    while count<(m-1):
+        element2.append(1)
+        element2.append(float(element[count]))
+        count += 1
+    x.insert(count2,element2)   
+    y.append(float(element[m-1]))
+    count2 += 1
 
-def featureNormalization(x1, x2):
-    x1_norm = x1
-    x2_norm = x2
-    mu1 = sum(x1_norm)/len(x1_norm)
-    mu2 = sum(x2_norm)/len(x2_norm)
-    sigma1 = stats.stdev(x1)
-    sigma2 = stats.stdev(x2)
-    i = 0
-    for i in range(len(x1_norm)):
-        x1_norm[i] = (x1_norm[i] - mu1)/sigma1
-        x2_norm[i] = (x2_norm[i] - mu2)/sigma2
-    return x1_norm, x2_norm
+def featureNormalization(x):
+    x_norm = x
+    m = len(x[0])
+    mu = []
+    sigma = []
+    i = 1
+    while i<m:
+        mu.append(sum(x_norm[][i])/len(x))
+        i += 1
+    i = 1
+    while i<m:
+        sigma.append(stats.stdev(x_norm[][i]))
+        i += 1
+    i = 1
+    while i<m:
+        j = 0
+        while j<len(x_norm):
+            x_norm[i][j] = (x_norm[i][j] - mu[i])/sigma[i]
+            j += 1
+        i += 1    
+    return mu, sigma, x_norm
 
-def polynomial(x1_normI, x2_normI, theta):
-    h = theta[0] + theta[1]*x1_normI + theta[2]*x2_normI
+def polynomial(x_normI, theta):
+    h = 0
+    count = 0
+    for element in theta:
+        h += element*x_normI[count]
+        count += 1
     return h
 
-def costFunction(x1_norm, x2_norm, y, theta):
+def costFunction(x_norm, y, theta):
     cost = 0
     i = 0
-    for i in range(len(x1_norm)):
-        cost += (polynomial(x1_norm[i], x2_norm[i], theta) - y[i])*(polynomial(x1_norm[i], x2_norm[i], theta) - y[i])
-    cost = cost/(2*len(x1_norm))
+    for i in range(len(x_norm)):
+        cost += (polynomial(x_norm[i], theta) - y[i])*(polynomial(x_norm[i], theta) - y[i])
+    cost = cost/(2*len(x_norm))
     return cost
 
-def multiVariableGradDescent(x1_norm, x2_norm, y, theta, alpha, maxIter):
+def multiVariableGradDescent(x_norm, y, theta, alpha, maxIter):
     i = 0
     for i in range(maxIter):
         j = 0
         costDer = 0
         theta1 = theta
-        for j in range(len(x1_norm)):
-                costDer += (polynomial(x1_norm[j], x2_norm[j], theta) - y[j])
+        for j in range(len(x_norm)):
+                costDer += (polynomial(x_norm[j], theta) - y[j])
         theta1[0] = theta[0] - alpha*(costDer/len(x1_norm))
         costDer = 0
         j = 0
