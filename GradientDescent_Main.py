@@ -11,15 +11,16 @@ for ele in data1:
     element = ele.split(',')
     m = len(element)
     count = 0
-    element2 = []
+    element2 = [1]
     while count<(m-1):
-        element2.append(1)
         element2.append(float(element[count]))
         count += 1
     x.insert(count2,element2)   
     y.append(float(element[m-1]))
     count2 += 1
 
+print(x)
+print(x[2][2])
 def featureNormalization(x):
     x_norm = x
     m = len(x[0])
@@ -27,17 +28,17 @@ def featureNormalization(x):
     sigma = []
     i = 1
     while i<m:
-        mu.append(sum(x_norm[][i])/len(x))
+        mu.append(sum(x_norm[:][i])/len(x))
         i += 1
     i = 1
     while i<m:
-        sigma.append(stats.stdev(x_norm[][i]))
+        sigma.append(stats.stdev(x_norm[:][i]))
         i += 1
-    i = 1
-    while i<m:
-        j = 0
-        while j<len(x_norm):
-            x_norm[i][j] = (x_norm[i][j] - mu[i])/sigma[i]
+    i = 0
+    while i<(len(x_norm)-1):
+        j = 1
+        while j<(m-1):
+            x_norm[i][j] = (x_norm[i][j] - mu[j])/sigma[j]
             j += 1
         i += 1    
     return mu, sigma, x_norm
@@ -54,7 +55,7 @@ def costFunction(x_norm, y, theta):
     cost = 0
     i = 0
     for i in range(len(x_norm)):
-        cost += (polynomial(x_norm[i][], theta) - y[i])*(polynomial(x_norm[i][], theta) - y[i])
+        cost += (polynomial(x_norm[i][:], theta) - y[i])*(polynomial(x_norm[i][:], theta) - y[i])
     cost = cost/(2*len(x_norm))
     return cost
 
@@ -67,9 +68,10 @@ def multiVariableGradDescent(x_norm, y, theta, alpha, maxIter):
             j = 0
             costDer = 0
             for j in range(len(x_norm)):
-                costDer += (polynomial(x_norm[j][], theta) - y[j])*x_norm[j][]
+                costDer += (polynomial(x_norm[j][:], theta) - y[j])*x_norm[j][k]
             theta1[k] = theta[k] - alpha*(costDer/len(x_norm))
             k += 1
+        theta = theta1
     return theta
 
 mu, sigma, x_norm = featureNormalization(x)
