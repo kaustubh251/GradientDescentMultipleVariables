@@ -54,50 +54,50 @@ def costFunction(x_norm, y, theta):
     cost = 0
     i = 0
     for i in range(len(x_norm)):
-        cost += (polynomial(x_norm[i], theta) - y[i])*(polynomial(x_norm[i], theta) - y[i])
+        cost += (polynomial(x_norm[i][], theta) - y[i])*(polynomial(x_norm[i][], theta) - y[i])
     cost = cost/(2*len(x_norm))
     return cost
 
 def multiVariableGradDescent(x_norm, y, theta, alpha, maxIter):
     i = 0
     for i in range(maxIter):
-        j = 0
-        costDer = 0
+        k = 0
         theta1 = theta
-        for j in range(len(x_norm)):
-                costDer += (polynomial(x_norm[j], theta) - y[j])
-        theta1[0] = theta[0] - alpha*(costDer/len(x1_norm))
-        costDer = 0
-        j = 0
-        for j in range(len(x1_norm)):
-                costDer += (polynomial(x1_norm[j], x2_norm[j], theta) - y[j])*x1_norm[j]
-        theta1[1] = theta[1] - alpha*(costDer/len(x1_norm))
-        costDer = 0
-        j = 0
-        for j in range(len(x1_norm)):
-                costDer += (polynomial(x1_norm[j], x2_norm[j], theta) - y[j])*x2_norm[j]
-        theta1[2] = theta[2] - alpha*(costDer/len(x1_norm))
-        theta = theta1
+        while k<len(theta):
+            j = 0
+            costDer = 0
+            for j in range(len(x_norm)):
+                costDer += (polynomial(x_norm[j][], theta) - y[j])*x_norm[j][]
+            theta1[k] = theta[k] - alpha*(costDer/len(x_norm))
+            k += 1
     return theta
 
-x1_norm, x2_norm = featureNormalization(x1, x2)
+mu, sigma, x_norm = featureNormalization(x)
 theta = []
+print("Enter the number of parameters")
+paramNums = int(input())
 print("Enter three parameters one by one")
-theta.append(float(input()))
-theta.append(float(input()))
-theta.append(float(input()))
+i = 0
+while i<paramNums:
+    theta.append(float(input()))
+    i += 1
 print("Enter learning rate")
 alpha = float(input())
 print("Enter maximum number of iterations for gradient descent to converge")
 maxIter = int(input())
-thetaFinal = multiVariableGradDescent(x1_norm, x2_norm, y, theta, alpha, maxIter)
+thetaFinal = multiVariableGradDescent(x_norm, y, theta, alpha, maxIter)
 print("Optimized parameters are")
 print(thetaFinal)
 print("Enter your datapoints one after another")
-x1_normI = float(input())
-x2_normI = float(input())
-hypothesis = polynomial(x1_normI, x2_normI, thetaFinal)
+x_normI = [1]
+i = 0
+while i<(paramNums-1):
+    x_normI.append(float(input()))
+    i += 1
+i = 1
+while i<paramNums:
+    x_normI[i] = (x_normI[i] - mu[i])/sigma[i]
+    i += 1
+hypothesis = polynomial(x_normI, thetaFinal)
 print("The prediction for given datapoints is")
 print(hypothesis)
-
-
